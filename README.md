@@ -1,4 +1,4 @@
-# Darukaa.Earth — Biodiversity Intelligence System
+# Darukaa.Earth - Biodiversity Intelligence System
 
 An AI environmental scientist, not a chatbot: a conversational system that reasons
 across soil, climate, land use, and human-impact metrics using a hand-curated,
@@ -81,9 +81,6 @@ flowchart TB
     CONV --> GEOAPI
 ```
 
-This mirrors the pattern used in [EIOS](https://github.com/varadbhanap/EIOS)
-(MCP server + shared reasoning core + multiple client interfaces), applied
-here to environmental reasoning instead of financial/credit-risk analytics.
 
 ### Request flow for the brief's own example
 
