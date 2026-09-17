@@ -1,0 +1,98 @@
+{
+  "interventions": [
+    {
+      "id": "legume_cover_crops",
+      "name": "Introduce legume-based cover crops",
+      "applicable_when": {
+        "soil_organic_carbon": {"max": 1.0},
+        "land_use_type": ["monoculture", "intercropping"]
+      },
+      "mechanism": "Legumes fix atmospheric nitrogen and their root exudates feed soil microbial communities, increasing organic matter turnover and microbial biomass.",
+      "primary_effect": {"metric": "soil_organic_carbon", "estimate": "+15-25% over 2-3 years"},
+      "secondary_effects": [
+        {"metric": "microbial_diversity", "estimate": "measurable increase within 1 growing season"},
+        {"metric": "pollinator_diversity", "estimate": "moderate increase if flowering legumes are used"}
+      ],
+      "time_horizon": "medium_term",
+      "confidence": "high",
+      "reference": "FAO, Conservation Agriculture and Soil Carbon Sequestration Report (2017)"
+    },
+    {
+      "id": "agroforestry_intercropping",
+      "name": "Convert monoculture to agroforestry or intercropping",
+      "applicable_when": {
+        "land_use_type": ["monoculture"],
+        "rainfall": ["low", "moderate"]
+      },
+      "mechanism": "Tree-crop integration adds vertical habitat structure, reduces soil surface temperature and evaporation, and creates microhabitats that support a wider range of insects and birds.",
+      "primary_effect": {"metric": "habitat_fragmentation", "estimate": "-20-30% fragmentation index over 3-5 years"},
+      "secondary_effects": [
+        {"metric": "soil_moisture", "estimate": "+10-15% retention due to canopy shading"},
+        {"metric": "species_richness", "estimate": "up to 60% higher than adjacent monoculture, per comparative studies"}
+      ],
+      "time_horizon": "long_term",
+      "confidence": "high",
+      "reference": "Torralba et al., Agroforestry and biodiversity: a meta-analysis, Agriculture, Ecosystems & Environment (2016)"
+    },
+    {
+      "id": "riparian_buffer_strips",
+      "name": "Establish native riparian buffer strips along water channels",
+      "applicable_when": {
+        "pollution_load": ["moderate", "high"]
+      },
+      "mechanism": "Vegetated buffer strips filter agrochemical runoff before it reaches waterways and provide continuous habitat corridors that counteract fragmentation.",
+      "primary_effect": {"metric": "pollution_load", "estimate": "-30-50% nutrient runoff into adjacent water bodies"},
+      "secondary_effects": [
+        {"metric": "habitat_fragmentation", "estimate": "improved connectivity along the corridor"}
+      ],
+      "time_horizon": "medium_term",
+      "confidence": "medium",
+      "reference": "Stutter et al., Vegetated buffer strips and their function on agricultural runoff, Journal of Environmental Quality (2012)"
+    },
+    {
+      "id": "reduced_tillage",
+      "name": "Shift to reduced or no-till cultivation",
+      "applicable_when": {
+        "soil_organic_carbon": {"max": 1.5}
+      },
+      "mechanism": "Minimizing soil disturbance preserves fungal networks and soil structure, slowing organic carbon oxidation and reducing erosion.",
+      "primary_effect": {"metric": "soil_organic_carbon", "estimate": "+0.1-0.3 percentage points over 5 years"},
+      "secondary_effects": [
+        {"metric": "microbial_diversity", "estimate": "increased fungal to bacterial ratio, associated with more stable soil aggregates"}
+      ],
+      "time_horizon": "long_term",
+      "confidence": "medium",
+      "reference": "Lal, Soil carbon sequestration impacts on global climate change and food security, Science (2004)"
+    },
+    {
+      "id": "pollinator_habitat_strips",
+      "name": "Plant wildflower or pollinator habitat strips at field margins",
+      "applicable_when": {
+        "pollinator_diversity": {"max": 0.5}
+      },
+      "mechanism": "Field-margin flowering strips provide nectar and nesting resources that are otherwise absent in monoculture landscapes, directly supplementing pollinator populations.",
+      "primary_effect": {"metric": "pollinator_diversity", "estimate": "up to 2x visitation rate within 1-2 seasons"},
+      "secondary_effects": [
+        {"metric": "species_richness", "estimate": "modest increase via trophic support"}
+      ],
+      "time_horizon": "short_term",
+      "confidence": "high",
+      "reference": "Scheper et al., Environmental factors driving the effectiveness of European agri-environmental measures, Ecology Letters (2013)"
+    },
+    {
+      "id": "assisted_natural_regeneration",
+      "name": "Assisted natural regeneration of degraded forest patches",
+      "applicable_when": {
+        "deforestation_rate": {"min": 1.0}
+      },
+      "mechanism": "Protecting and lightly managing existing seed sources and root stock allows forest cover to recover faster than active replanting, at lower cost and with locally adapted species composition.",
+      "primary_effect": {"metric": "habitat_fragmentation", "estimate": "measurable canopy cover recovery within 5-10 years"},
+      "secondary_effects": [
+        {"metric": "rainfall", "estimate": "potential local microclimate stabilization at landscape scale"}
+      ],
+      "time_horizon": "long_term",
+      "confidence": "medium",
+      "reference": "Chazdon & Guariguata, Natural regeneration as a tool for large-scale forest restoration, Biotropica (2016)"
+    }
+  ]
+}

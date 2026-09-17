@@ -1,0 +1,108 @@
+{
+  "metrics": {
+    "soil_organic_carbon": {
+      "unit": "%",
+      "category": "soil_health",
+      "thresholds": {
+        "critical_low": 0.5,
+        "low": 1.0,
+        "healthy": 2.0,
+        "excellent": 3.5
+      },
+      "description": "Soil organic carbon (SOC) is the single strongest predictor of soil microbial diversity and water holding capacity in cultivated land.",
+      "affects": ["microbial_diversity", "species_richness", "soil_moisture_retention", "pollinator_diversity"],
+      "reference": "FAO Global Soil Partnership, Status of the World's Soil Resources (2015)"
+    },
+    "soil_ph": {
+      "unit": "pH",
+      "category": "soil_health",
+      "thresholds": {
+        "acidic_stress": 5.0,
+        "optimal_low": 6.0,
+        "optimal_high": 7.5,
+        "alkaline_stress": 8.5
+      },
+      "description": "Soil pH outside 6.0-7.5 sharply reduces nutrient availability (notably phosphorus and micronutrients) and constrains which plant and microbial species can establish.",
+      "affects": ["species_richness", "microbial_diversity", "nutrient_availability"],
+      "reference": "Bardgett & van der Putten, Belowground biodiversity and ecosystem functioning, Nature (2014)"
+    },
+    "soil_moisture": {
+      "unit": "% volumetric",
+      "category": "soil_health",
+      "thresholds": {
+        "critical_low": 10,
+        "low": 20,
+        "adequate": 30,
+        "saturated": 45
+      },
+      "description": "Soil moisture regulates root zone habitat for soil fauna and directly limits vegetation cover, which is the base layer of terrestrial habitat diversity.",
+      "affects": ["habitat_diversity", "species_richness", "vegetation_cover"],
+      "reference": "IPCC AR6 WG2, Chapter 3: Terrestrial and Freshwater Ecosystems (2022)"
+    },
+    "rainfall": {
+      "unit": "mm/year (categorical: low/moderate/high)",
+      "category": "climate",
+      "thresholds": {
+        "semi_arid_low": 400,
+        "moderate": 800,
+        "high": 1500
+      },
+      "description": "Rainfall variability is the dominant climate driver of species survival in semi-arid agro-ecosystems, more so than mean temperature.",
+      "affects": ["soil_moisture", "species_richness", "water_availability"],
+      "reference": "IPCC AR6 WG1, Chapter 8: Water Cycle Changes (2021)"
+    },
+    "temperature": {
+      "unit": "degrees C (anomaly or mean)",
+      "category": "climate",
+      "thresholds": {
+        "heat_stress_threshold": 35
+      },
+      "description": "Sustained temperatures above regional heat-stress thresholds reduce pollinator activity windows and accelerate soil organic carbon decomposition.",
+      "affects": ["pollinator_diversity", "soil_organic_carbon"],
+      "reference": "IPBES Global Assessment Report on Biodiversity and Ecosystem Services (2019)"
+    },
+    "land_use_type": {
+      "unit": "categorical",
+      "category": "land_use",
+      "categories": ["monoculture", "intercropping", "agroforestry", "natural_forest", "fallow", "urban"],
+      "description": "Land use structure determines habitat heterogeneity; monocultures reduce structural complexity and fragment habitat corridors relative to intercropped or agroforestry systems.",
+      "affects": ["habitat_fragmentation", "species_richness", "pollinator_diversity"],
+      "reference": "Newbold et al., Global effects of land use on local terrestrial biodiversity, Nature (2015)"
+    },
+    "habitat_fragmentation": {
+      "unit": "index 0-1 (derived)",
+      "category": "land_use",
+      "description": "Fragmentation index derived from patch size and connectivity; higher fragmentation isolates populations and reduces effective breeding ranges.",
+      "affects": ["species_richness", "genetic_diversity"],
+      "reference": "Haddad et al., Habitat fragmentation and its lasting impact on Earth's ecosystems, Science Advances (2015)"
+    },
+    "species_richness": {
+      "unit": "count / index",
+      "category": "biodiversity",
+      "description": "Number of distinct species observed in a defined area; the primary biodiversity outcome metric this system optimizes for.",
+      "affects": [],
+      "reference": "CBD, Global Biodiversity Outlook 5 (2020)"
+    },
+    "pollinator_diversity": {
+      "unit": "index",
+      "category": "biodiversity",
+      "description": "Diversity of pollinating insects and birds; a leading indicator of ecosystem resilience and crop yield stability.",
+      "affects": ["species_richness"],
+      "reference": "Potts et al., Global pollinator declines: trends, impacts and drivers, Trends in Ecology & Evolution (2010)"
+    },
+    "pollution_load": {
+      "unit": "categorical / index",
+      "category": "human_impact",
+      "description": "Aggregate exposure to agrochemical runoff, industrial effluent, and airborne pollutants; suppresses soil microbial diversity and pollinator survival.",
+      "affects": ["microbial_diversity", "pollinator_diversity", "soil_organic_carbon"],
+      "reference": "IPBES-IPCC Co-Sponsored Workshop Report on Biodiversity and Climate Change (2021)"
+    },
+    "deforestation_rate": {
+      "unit": "% per year",
+      "category": "human_impact",
+      "description": "Annual rate of forest cover loss in the surrounding landscape; a leading driver of habitat fragmentation and regional microclimate shifts.",
+      "affects": ["habitat_fragmentation", "rainfall", "species_richness"],
+      "reference": "FAO, Global Forest Resources Assessment (2020)"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "edges": [
+    {"from": "soil_organic_carbon", "to": "microbial_diversity", "relation": "increases", "strength": "strong", "reference": "FAO Global Soil Partnership (2015)"},
+    {"from": "soil_organic_carbon", "to": "soil_moisture", "relation": "increases", "strength": "moderate", "reference": "Lal, Science (2004)"},
+    {"from": "soil_ph", "to": "microbial_diversity", "relation": "modulates", "strength": "strong", "reference": "Bardgett & van der Putten, Nature (2014)"},
+    {"from": "soil_moisture", "to": "vegetation_cover", "relation": "increases", "strength": "strong", "reference": "IPCC AR6 WG2 (2022)"},
+    {"from": "vegetation_cover", "to": "habitat_diversity", "relation": "increases", "strength": "strong", "reference": "IPCC AR6 WG2 (2022)"},
+    {"from": "habitat_diversity", "to": "species_richness", "relation": "increases", "strength": "strong", "reference": "CBD, Global Biodiversity Outlook 5 (2020)"},
+    {"from": "rainfall", "to": "soil_moisture", "relation": "increases", "strength": "strong", "reference": "IPCC AR6 WG1 (2021)"},
+    {"from": "temperature", "to": "pollinator_diversity", "relation": "decreases_above_threshold", "strength": "moderate", "reference": "IPBES Global Assessment (2019)"},
+    {"from": "temperature", "to": "soil_organic_carbon", "relation": "decreases", "strength": "moderate", "reference": "IPBES Global Assessment (2019)"},
+    {"from": "land_use_type", "to": "habitat_fragmentation", "relation": "modulates", "strength": "strong", "reference": "Newbold et al., Nature (2015)"},
+    {"from": "habitat_fragmentation", "to": "species_richness", "relation": "decreases", "strength": "strong", "reference": "Haddad et al., Science Advances (2015)"},
+    {"from": "habitat_fragmentation", "to": "genetic_diversity", "relation": "decreases", "strength": "moderate", "reference": "Haddad et al., Science Advances (2015)"},
+    {"from": "pollinator_diversity", "to": "species_richness", "relation": "increases", "strength": "moderate", "reference": "Potts et al., Trends in Ecology & Evolution (2010)"},
+    {"from": "pollution_load", "to": "microbial_diversity", "relation": "decreases", "strength": "strong", "reference": "IPBES-IPCC Workshop Report (2021)"},
+    {"from": "pollution_load", "to": "pollinator_diversity", "relation": "decreases", "strength": "strong", "reference": "IPBES-IPCC Workshop Report (2021)"},
+    {"from": "pollution_load", "to": "soil_organic_carbon", "relation": "decreases", "strength": "moderate", "reference": "IPBES-IPCC Workshop Report (2021)"},
+    {"from": "deforestation_rate", "to": "habitat_fragmentation", "relation": "increases", "strength": "strong", "reference": "FAO Global Forest Resources Assessment (2020)"},
+    {"from": "deforestation_rate", "to": "rainfall", "relation": "decreases", "strength": "moderate", "reference": "FAO Global Forest Resources Assessment (2020)"},
+    {"from": "microbial_diversity", "to": "species_richness", "relation": "increases", "strength": "moderate", "reference": "Bardgett & van der Putten, Nature (2014)"}
+  ],
+  "notes": "This graph is intentionally small and hand-curated from cited literature rather than learned from data, so every edge in a reasoning trace can be attributed to a source. It is designed to be extended with a data-driven layer (e.g. structural equation modeling on field survey data) as a future iteration."
+}
