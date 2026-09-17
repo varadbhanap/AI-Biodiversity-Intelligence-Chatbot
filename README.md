@@ -1,9 +1,9 @@
 # Darukaa.Earth - Biodiversity Intelligence System
 
 An AI environmental scientist, not a chatbot: a conversational system that reasons
-across soil, climate, land use, and human-impact metrics using a hand-curated,
+across soil, climate, land use, and human impact metrics using a hand-curated,
 cited knowledge graph, retrieves supporting evidence via RAG, and produces
-quantified, evidence-backed recommendations — the exact output format the
+quantified, evidence-backed recommendations - the exact output format the
 challenge specifies.
 
 Built for the Darukaa.Earth AI Engineer Internship (Climate-Tech & Nature
@@ -11,18 +11,18 @@ Intelligence) hackathon challenge.
 
 ## Why this isn't "just an LLM wrapper"
 
-The brief is explicit that shallow, single-variable, LLM-only answers will
+The brief is explicit that shallow, single-variable, LLM only answers will
 score poorly. Three design choices exist specifically to avoid that:
 
 1. **A hand-curated causal graph is the reasoning core, not the LLM.**
    `data/causal_graph.json` encodes ~19 directed, cited edges between 11
    environmental metrics (e.g. `soil_organic_carbon → microbial_diversity →
-   species_richness`). Multi-metric reasoning is literal graph traversal
+   species_richness`). Multi metric reasoning is literal graph traversal
    (`networkx`), so every "this affects that" claim in a recommendation can be
    walked back to a specific edge and its citation — not generated from a
    prompt.
 2. **Recommendations are template-generated from a cited intervention
-   catalog**, not free-generated text. `data/interventions.json` has 6
+   catalog**, not free generated text. `data/interventions.json` has 6
    interventions, each with an applicability condition, mechanism, quantified
    primary/secondary effects, time horizon, confidence, and reference. This is
    what makes the output match the brief's own example ("Introduce
@@ -145,11 +145,11 @@ the geo-enrichment calls to SoilGrids/GBIF are optional and fail open.
 
 There is no relational database in this system by design: the knowledge
 layer is version-controlled JSON (auditable via `git diff`, no migration
-tooling needed for a hackathon-scale knowledge base), and conversation state
+tooling needed for a hackathon scale knowledge base), and conversation state
 is an in-memory session store (`src/conversation/session.py`,
 `SessionStore`) keyed by `session_id`. `SessionStore` is written as a thin
 interface specifically so it can be swapped for Redis or SQLite in a
-production deployment without touching any calling code — see
+production deployment without touching any calling code - see
 `src/orchestrator.py`, which only ever calls `sessions.get_or_create(...)`.
 
 ## CI/CD
