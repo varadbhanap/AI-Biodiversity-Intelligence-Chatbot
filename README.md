@@ -81,45 +81,6 @@ flowchart TB
     CONV --> GEOAPI
 ```
 
-
-### Request flow for the brief's own example
-
-Input: `SOC 0.3%, rainfall low, monoculture wheat, semi-arid`
-
-1. **Conversation manager** extracts `soil_organic_carbon=0.3`,
-   `rainfall=low`, `land_use_type=monoculture` from text or accepts them as
-   structured JSON directly.
-2. **Reasoning engine** checks each metric against its threshold in
-   `knowledge_base.json` → `soil_organic_carbon=0.3` is below
-   `critical_low=0.5` → flagged `critical`. It then walks the causal graph
-   from `soil_organic_carbon` outward and finds it reaches
-   `microbial_diversity` (1 hop) and `species_richness` (2 hops).
-3. **Recommendation generator** filters `interventions.json` for entries
-   whose `applicable_when` matches the observed state (`soil_organic_carbon
-   <= 1.0` and `land_use_type` in `[monoculture, intercropping]`), ranks them
-   by how many limiting metrics they address, and returns them with the
-   causal path attached.
-4. **Vector store** is queried with the intervention name to retrieve
-   supporting passages from `data/documents/` for additional grounding.
-5. Output includes: recommendation, why it works, impacted metrics, primary
-   + secondary quantified effects, time horizon, confidence, and citation —
-   every field the brief's "Output Quality" section requires.
-
-## Knowledge system design
-
-| Layer | File | Contents |
-|---|---|---|
-| Structured metrics | `data/knowledge_base.json` | 11 metrics across soil, climate, land use, biodiversity, human impact — thresholds, units, what each affects, citation |
-| Interventions | `data/interventions.json` | 6 interventions with trigger conditions, mechanism, quantified effects, time horizon, confidence, citation |
-| Causal graph | `data/causal_graph.json` | 19 directed, cited edges connecting metrics — the multi-metric reasoning substrate |
-| RAG corpus | `data/documents/*.md` | 5 short reference documents synthesized from cited literature (FAO, IPCC, IPBES, CBD, peer-reviewed meta-analyses), chunked and embedded for retrieval |
-| Live geo enrichment | `src/knowledge/geo_data.py` | Real API calls to ISRIC SoilGrids (soil organic carbon, pH by coordinate) and GBIF (species occurrence counts near a coordinate), with graceful fallback to manual input if unreachable |
-
-**This is intentionally a hand-curated knowledge base rather than a scraped
-dataset.** Every number in it traces to a named, real source. That
-traceability is what "clarity of knowledge retrieval pipeline" is asking for
-— it's a defensible design choice to discuss in interview, not a shortcut.
-
 ### RAG implementation detail worth knowing for review
 
 The vector store (`src/knowledge/vector_store.py`) tries to load
@@ -199,50 +160,6 @@ production deployment without touching any calling code — see
 3. Runs the full pytest suite
 4. Boots the FastAPI app and hits `/health` as a smoke test
 
-## Example interaction
-
-```
-> Biodiversity is declining on my land
-[assistant] What is the soil organic carbon percentage (SOC%) for this land?
-
-> {"soil_organic_carbon": 0.3, "rainfall": "low", "land_use_type": "monoculture"}
-
-{
-  "limiting_metrics": [
-    {"metric": "soil_organic_carbon", "value": 0.3, "severity": "critical", ...}
-  ],
-  "recommendations": [
-    {
-      "recommendation": "Introduce legume-based cover crops",
-      "why_it_works": "Legumes fix atmospheric nitrogen and their root exudates
-                        feed soil microbial communities...",
-      "primary_effect": {"metric": "soil_organic_carbon", "estimate": "+15-25% over 2-3 years"},
-      "secondary_effects": [{"metric": "microbial_diversity", "estimate": "..."}],
-      "time_horizon": "medium_term",
-      "confidence": "high",
-      "reference": "FAO, Conservation Agriculture and Soil Carbon Sequestration Report (2017)"
-    }
-  ]
-}
-```
-
-## Honest limitations and next steps
-
-- The causal graph is small (19 edges) and hand-curated rather than learned
-  from field data — appropriate for a hackathon timeline, and the JSON
-  structure is designed to be extended (e.g. with structural equation
-  modeling on real survey data) without changing the reasoning engine's code.
-- Text-based slot extraction is regex/keyword-based for transparency and
-  determinism; a production version would swap in an LLM-based extractor
-  behind the same `ConversationSession` interface.
-- Geo-enrichment currently reads two properties (SOC, pH) from SoilGrids and
-  a coarse species-occurrence count from GBIF; a fuller integration would add
-  land cover classification (e.g. from a remote-sensing API) as a third geo
-  signal.
-
 ## Author
 
-Varad Bhanap — final-year B.E. student, Artificial Intelligence & Data
-Science, Ajeenkya DY Patil School of Engineering (SPPU, Pune). Built using
-the same MCP-powered multi-agent architecture pattern as
-[EIOS](https://github.com/varadbhanap/EIOS).
+Varad Bhanap
