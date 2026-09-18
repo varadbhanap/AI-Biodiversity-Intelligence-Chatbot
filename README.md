@@ -81,7 +81,7 @@ flowchart TB
     CONV --> GEOAPI
 ```
 
-### RAG implementation detail worth knowing for review
+### RAG implementation 
 
 The vector store (`src/knowledge/vector_store.py`) tries to load
 `sentence-transformers` (`all-MiniLM-L6-v2`) for real semantic embeddings, and
