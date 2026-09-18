@@ -28,9 +28,44 @@ class LimitingMetric:
 
 
 def _classify_severity(metric_def: dict, value: Any) -> str | None:
+    # Categorical metrics (land use, pollution level, etc.) declare their
+    # own risk mapping directly, since "critical/low" thresholds don't make
+    # sense for a string value.
+    risk_categories = metric_def.get("risk_categories")
+    if risk_categories and isinstance(value, str):
+        return risk_categories.get(value.lower())
+
     thresholds = metric_def.get("thresholds")
     if not thresholds or not isinstance(value, (int, float)):
         return None
+
+    direction = metric_def.get("direction", "lower_is_worse")
+
+    if direction == "range":
+        # e.g. soil pH: stress at both extremes, healthy in the middle band.
+        low_stress = thresholds.get("acidic_stress")
+        opt_low = thresholds.get("optimal_low")
+        opt_high = thresholds.get("optimal_high")
+        high_stress = thresholds.get("alkaline_stress")
+        if low_stress is not None and value <= low_stress:
+            return "critical"
+        if high_stress is not None and value >= high_stress:
+            return "critical"
+        if opt_low is not None and value < opt_low:
+            return "low"
+        if opt_high is not None and value > opt_high:
+            return "low"
+        return None
+
+    if direction == "higher_is_worse":
+        # e.g. deforestation rate: larger values are worse, not smaller.
+        if "critical_high" in thresholds and value >= thresholds["critical_high"]:
+            return "critical"
+        if "concerning" in thresholds and value >= thresholds["concerning"]:
+            return "low"
+        return None
+
+    # Default: lower_is_worse (e.g. soil organic carbon, soil moisture).
     if "critical_low" in thresholds and value <= thresholds["critical_low"]:
         return "critical"
     if "low" in thresholds and value <= thresholds["low"]:

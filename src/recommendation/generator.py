@@ -101,27 +101,80 @@ class RecommendationGenerator:
         except Exception:  # noqa: BLE001 - evidence retrieval is best-effort
             return []
 
+    def _affected_metrics(self, intervention: dict) -> set[str]:
+        return {intervention["primary_effect"]["metric"]} | {
+            e["metric"] for e in intervention.get("secondary_effects", [])
+        }
+
+    def _select_diverse_interventions(
+        self, matches: list[dict], limiting: list[LimitingMetric], max_recommendations: int
+    ) -> list[dict]:
+        """
+        Greedy set-cover style selection over *problems*, not just metric
+        names. Each limiting metric's "reach" is itself plus everything it
+        causally affects downstream (already computed by the reasoning
+        engine) - so an intervention counts as addressing a limiting driver
+        like deforestation_rate or land_use_type even though its own
+        measured outcome is a different metric (habitat_fragmentation),
+        since that's the actual causal effect being fixed. Without this,
+        driver-type metrics (land use, pollution, deforestation) would
+        never get credit for the interventions that genuinely address them,
+        because the driver's own name never appears in any intervention's
+        effect list - only its downstream consequences do.
+
+        Falls back to raw overlap ranking once every limiting problem is
+        covered (or if only one was limiting to begin with), so single-
+        limiting-metric inputs behave exactly as before this change.
+        """
+        reach: dict[str, set[str]] = {
+            lm.metric: {lm.metric} | {e["target"] for e in lm.downstream_effects}
+            for lm in limiting
+        }
+
+        def coverage_count(iv: dict, ignore_covered: set[str]) -> int:
+            affected = self._affected_metrics(iv)
+            return sum(
+                1
+                for name, reach_set in reach.items()
+                if name not in ignore_covered and affected & reach_set
+            )
+
+        def raw_overlap(iv: dict) -> int:
+            affected = self._affected_metrics(iv)
+            return sum(1 for reach_set in reach.values() if affected & reach_set)
+
+        remaining = list(matches)
+        covered: set[str] = set()
+        selected: list[dict] = []
+
+        while remaining and len(selected) < max_recommendations:
+            remaining.sort(key=lambda iv: coverage_count(iv, covered), reverse=True)
+            best = remaining[0]
+
+            if coverage_count(best, covered) == 0 and selected:
+                remaining.sort(key=raw_overlap, reverse=True)
+                best = remaining[0]
+
+            selected.append(best)
+            affected = self._affected_metrics(best)
+            for name, reach_set in reach.items():
+                if affected & reach_set:
+                    covered.add(name)
+            remaining.remove(best)
+
+        return selected
+
     def generate(
         self, observed: dict[str, Any], max_recommendations: int = 3
     ) -> list[Recommendation]:
         matches = self._matching_interventions(observed)
 
-        # Rank by how many metrics the observed limiting set overlaps with
-        # this intervention's effect set - i.e. prioritize interventions
-        # that address the *most limiting* metrics for this specific input.
         limiting = self.engine.identify_limiting_metrics(observed)
-        limiting_names = {m.metric for m in limiting}
 
-        def score(intervention: dict) -> int:
-            affected = {intervention["primary_effect"]["metric"]} | {
-                e["metric"] for e in intervention.get("secondary_effects", [])
-            }
-            return len(affected & limiting_names)
-
-        matches.sort(key=score, reverse=True)
+        selected = self._select_diverse_interventions(matches, limiting, max_recommendations)
 
         recommendations = []
-        for intervention in matches[:max_recommendations]:
+        for intervention in selected:
             causal = self._causal_explanation_for(intervention)
             impacted = [intervention["primary_effect"]["metric"]] + [
                 e["metric"] for e in intervention.get("secondary_effects", [])
